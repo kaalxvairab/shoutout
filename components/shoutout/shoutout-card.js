@@ -4,9 +4,10 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { getInitials, getAvatarColor, getRelativeTime } from '@/lib/utils'
 import { CATEGORIES, CATEGORY_COLORS } from '@/lib/constants'
+import ReactionButtons from './reaction-buttons'
 
-export default function ShoutoutCard({ shoutout }) {
-  const { sender, recipient, message, category, points, created_at } = shoutout
+export default function ShoutoutCard({ shoutout, currentUserId }) {
+  const { id, sender, recipient, message, category, points, created_at, reactions } = shoutout
 
   const categoryInfo = CATEGORIES.find((c) => c.value === category)
   const categoryColors = CATEGORY_COLORS[category] || CATEGORY_COLORS.teamwork
@@ -54,6 +55,15 @@ export default function ShoutoutCard({ shoutout }) {
 
             {/* Message */}
             <p className="mt-3 text-sm text-foreground leading-relaxed">{message}</p>
+
+            {/* Reactions */}
+            <div className="mt-3 pt-3 border-t">
+              <ReactionButtons
+                shoutoutId={id}
+                reactions={reactions || []}
+                currentUserId={currentUserId}
+              />
+            </div>
 
             {/* Footer */}
             <div className="mt-3 flex items-center justify-between pt-2 border-t border-dashed border-muted">
