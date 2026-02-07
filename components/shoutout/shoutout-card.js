@@ -56,15 +56,6 @@ export default function ShoutoutCard({ shoutout, currentUserId }) {
             {/* Message */}
             <p className="mt-3 text-sm text-foreground leading-relaxed">{message}</p>
 
-            {/* Reactions */}
-            <div className="mt-3 pt-3 border-t">
-              <ReactionButtons
-                shoutoutId={id}
-                reactions={reactions || []}
-                currentUserId={currentUserId}
-              />
-            </div>
-
             {/* Footer */}
             <div className="mt-3 flex items-center justify-between pt-2 border-t border-dashed border-muted">
               <span className="text-xs text-muted-foreground">
