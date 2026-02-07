@@ -50,23 +50,33 @@ export default async function DashboardPage() {
     .not('full_name', 'is', null)
     .order('full_name')
 
-  // Get team leaderboard (same department, this month)
+  // Get team and company leaderboards (same month). Defensive: RPC may not exist in all envs.
   const startOfMonth = new Date()
   startOfMonth.setDate(1)
   startOfMonth.setHours(0, 0, 0, 0)
-
-  const { data: teamLeaderboard } = await supabase.rpc('get_leaderboard', {
-    department_filter: profile.department,
+  const leaderboardParams = {
     start_date: startOfMonth.toISOString(),
     limit_count: 5,
-  })
+  }
 
-  // Get company leaderboard (all departments, this month)
-  const { data: companyLeaderboard } = await supabase.rpc('get_leaderboard', {
-    department_filter: null,
-    start_date: startOfMonth.toISOString(),
-    limit_count: 5,
-  })
+  let teamLeaderboard = null
+  let companyLeaderboard = null
+  try {
+    const [teamRes, companyRes] = await Promise.all([
+      supabase.rpc('get_leaderboard', {
+        department_filter: profile.department,
+        ...leaderboardParams,
+      }),
+      supabase.rpc('get_leaderboard', {
+        department_filter: null,
+        ...leaderboardParams,
+      }),
+    ])
+    teamLeaderboard = teamRes.data ?? null
+    companyLeaderboard = companyRes.data ?? null
+  } catch {
+    // RPC may be missing or fail in some environments (e.g. migration not applied)
+  }
 
   return (
     <div className="min-h-screen bg-slate-50">
