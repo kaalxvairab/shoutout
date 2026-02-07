@@ -59,14 +59,14 @@ export default async function DashboardPage() {
     department_filter: profile.department,
     start_date: startOfMonth.toISOString(),
     limit_count: 5,
-  }).catch(() => ({ data: null }))
+  })
 
   // Get company leaderboard (all departments, this month)
   const { data: companyLeaderboard } = await supabase.rpc('get_leaderboard', {
     department_filter: null,
     start_date: startOfMonth.toISOString(),
     limit_count: 5,
-  }).catch(() => ({ data: null }))
+  })
 
   return (
     <div className="min-h-screen bg-slate-50">
