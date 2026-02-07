@@ -38,18 +38,19 @@ export default function OnboardingPage() {
 
       const { error: updateError } = await supabase
         .from('profiles')
-        .update({
+        .upsert({
+          id: user.id,
           full_name: formData.full_name,
           job_title: formData.job_title,
           department: formData.department,
           birthday: formData.birthday || null,
           updated_at: new Date().toISOString(),
         })
-        .eq('id', user.id)
 
       if (updateError) {
         setError(updateError.message)
       } else {
+        router.refresh()
         router.push('/dashboard')
       }
     } catch (err) {
