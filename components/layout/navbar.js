@@ -33,13 +33,13 @@ export default function Navbar({ user, profile }) {
   const pointsRemaining = MONTHLY_POINTS_ALLOWANCE - (profile?.points_given_this_month || 0)
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
-      <div className="container mx-auto px-4">
+    <nav className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-lg supports-[backdrop-filter]:bg-white/60 shadow-sm">
+      <div className="container mx-auto px-4 max-w-7xl">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link href="/dashboard" className="flex items-center gap-2">
-            <span className="text-2xl">🎉</span>
-            <span className="text-xl font-bold">Shoutout</span>
+          <Link href="/dashboard" className="flex items-center gap-2 group">
+            <span className="text-2xl group-hover:animate-float transition-transform">🎉</span>
+            <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Shoutout</span>
           </Link>
 
           {/* Right side */}

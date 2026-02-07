@@ -41,21 +41,42 @@ export default function DashboardContent({
     }))
   }
 
+  const pointsPercent = Math.round((pointsRemaining / MONTHLY_POINTS_ALLOWANCE) * 100)
+
   return (
-    <main className="container mx-auto px-4 py-6">
-      {/* Quick Actions */}
-      <Card className="mb-6">
-        <CardContent className="py-4">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div>
-              <h1 className="text-xl font-semibold">Hey {firstName} 👋</h1>
-              <p className="text-muted-foreground text-sm">
-                You have{' '}
-                <span className="font-medium text-amber-600">{pointsRemaining} points</span>{' '}
-                left to give this month
-              </p>
+    <main className="container mx-auto px-4 py-8 max-w-7xl">
+      {/* Quick Actions Hero */}
+      <Card className="mb-8 overflow-hidden border-0 shadow-lg bg-gradient-to-br from-violet-600 via-purple-600 to-indigo-700 text-white animate-fade-in-up">
+        <CardContent className="py-6 px-6 sm:px-8 relative">
+          {/* Decorative background circles */}
+          <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-2xl" />
+          <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
+          <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
+            <div className="space-y-2">
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Hey {firstName} 👋</h1>
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-full px-4 py-1.5">
+                  <span className="text-lg animate-float">✨</span>
+                  <span className="font-semibold text-lg">{pointsRemaining}</span>
+                  <span className="text-white/80 text-sm">points left to give</span>
+                </div>
+              </div>
+              {/* Mini progress bar */}
+              <div className="flex items-center gap-2 max-w-xs">
+                <div className="flex-1 h-1.5 bg-white/20 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-amber-300 rounded-full transition-all duration-500"
+                    style={{ width: `${pointsPercent}%` }}
+                  />
+                </div>
+                <span className="text-xs text-white/70">{pointsPercent}%</span>
+              </div>
             </div>
-            <Button onClick={() => setIsCreateOpen(true)} size="lg">
+            <Button
+              onClick={() => setIsCreateOpen(true)}
+              size="lg"
+              className="bg-white text-purple-700 hover:bg-white/90 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02] font-semibold text-base px-6"
+            >
               🎉 Send a Shoutout
             </Button>
           </div>
@@ -63,11 +84,16 @@ export default function DashboardContent({
       </Card>
 
       {/* Main content grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Feed - takes 2 columns on large screens */}
-        <div className="lg:col-span-2 space-y-4">
-          <h2 className="text-lg font-semibold">Recent Shoutouts</h2>
-          <ShoutoutFeed shoutouts={shoutouts} currentUserId={user?.id} />
+        <div className="lg:col-span-2 space-y-5">
+          <div className="flex items-center gap-2">
+            <h2 className="text-xl font-bold tracking-tight">Recent Shoutouts</h2>
+            <span className="text-xs bg-muted text-muted-foreground px-2 py-0.5 rounded-full font-medium">
+              {shoutouts?.length || 0}
+            </span>
+          </div>
+          <ShoutoutFeed shoutouts={shoutouts} />
         </div>
 
         {/* Leaderboards - takes 1 column on large screens */}
