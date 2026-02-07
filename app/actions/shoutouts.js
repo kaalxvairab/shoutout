@@ -10,6 +10,7 @@ import {
   MONTHLY_POINTS_ALLOWANCE,
   CATEGORIES,
 } from '@/lib/constants'
+import { sendShoutoutEmail } from '@/lib/email'
 
 export async function createShoutout(formData) {
   const supabase = await createClient()
@@ -55,10 +56,10 @@ export async function createShoutout(formData) {
     return { error: `Points must be between ${MIN_SHOUTOUT_POINTS} and ${MAX_SHOUTOUT_POINTS}` }
   }
 
-  // Check sender's remaining points
+  // Check sender's remaining points and get their name
   const { data: senderProfile } = await supabase
     .from('profiles')
-    .select('points_given_this_month')
+    .select('full_name, points_given_this_month')
     .eq('id', user.id)
     .single()
 
@@ -99,7 +100,7 @@ export async function createShoutout(formData) {
   // Update recipient's points_balance
   const { data: recipientProfile } = await supabase
     .from('profiles')
-    .select('points_balance')
+    .select('points_balance, email, full_name')
     .eq('id', recipientId)
     .single()
 
@@ -112,6 +113,20 @@ export async function createShoutout(formData) {
 
   if (recipientError) {
     console.error('Error updating recipient points:', recipientError)
+  }
+
+  // Send email notification to recipient
+  if (recipientProfile?.email) {
+    sendShoutoutEmail({
+      recipientEmail: recipientProfile.email,
+      recipientName: recipientProfile.full_name || 'Team Member',
+      senderName: senderProfile?.full_name || 'A colleague',
+      message,
+      category,
+      points,
+    }).catch(err => {
+      console.error('Failed to send shoutout email:', err)
+    })
   }
 
   revalidatePath('/dashboard')
