@@ -2,6 +2,14 @@
 <a id="readme-top"></a>
 
 
+# Problem Addressed: Unifying Solutions
+
+# Team Number 5 :
+- Benjamin Hockley
+- Ranjan Suwal
+- Nathan Mitchell
+
+
 
 <!-- PROJECT SHIELDS -->
 <!--
@@ -105,6 +113,62 @@ Project Developed for the Hack the Diff hackathon at Cardiff Central Library!
 The platform is live at : https://shoutout-hackdiff.vercel.app/
 
 Feel free to test it and let us know your thoughts!
+
+## Run the Project Locally
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) v18 or later
+- [npm](https://www.npmjs.com/) (comes with Node.js)
+- A [Supabase](https://supabase.com/) project
+- A [Resend](https://resend.com/) account (for email notifications)
+
+### 1. Clone the repository
+
+```bash
+git clone <your-repo-url>
+cd shoutout
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Set up environment variables
+
+Create a `.env` file in the `shoutout` root directory with the following variables:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=<your-supabase-project-url>
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-supabase-anon-key>
+RESEND_API_KEY=<your-resend-api-key>
+RESEND_FROM_EMAIL=<your-verified-sender-email>
+```
+
+You can find your Supabase URL and anon key in your [Supabase dashboard](https://supabase.com/dashboard/project/_/settings/api) under **Project Settings → API**.
+
+### 4. Set up the Supabase database
+
+1. Go to your [Supabase SQL Editor](https://supabase.com/dashboard/project/_/sql)
+2. Run the SQL migrations located in the `supabase/` directory (if present), or manually create the required tables for users, shoutouts, and leaderboard data
+
+### 5. Run the development server
+
+```bash
+npm run dev
+```
+
+The app will be available at [http://localhost:3000](http://localhost:3000).
+
+### 6. Build for production
+
+```bash
+npm run build
+npm start
+```
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
