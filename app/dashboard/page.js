@@ -42,20 +42,6 @@ export default async function DashboardPage() {
     .order('created_at', { ascending: false })
     .limit(20)
 
-  // Calculate actual points balance from all received shoutouts
-  const { data: allReceivedPoints } = await supabase
-    .from('shoutouts')
-    .select('points')
-    .eq('recipient_id', user.id)
-
-  const calculatedPointsBalance = allReceivedPoints?.reduce((sum, s) => sum + (s.points || 0), 0) || 0
-
-  // Create profile with calculated points balance
-  const profileWithPoints = {
-    ...profile,
-    points_balance: calculatedPointsBalance,
-  }
-
   // Get all profiles for recipient selection
   const { data: allProfiles } = await supabase
     .from('profiles')
@@ -94,10 +80,10 @@ export default async function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <Navbar user={user} profile={profileWithPoints} />
+      <Navbar user={user} profile={profile} />
       <DashboardContent
         user={user}
-        profile={profileWithPoints}
+        profile={profile}
         shoutouts={shoutouts || []}
         allProfiles={allProfiles || []}
         teamLeaderboard={teamLeaderboard || []}
