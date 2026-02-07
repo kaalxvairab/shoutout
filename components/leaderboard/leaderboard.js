@@ -17,22 +17,21 @@ const RANK_STYLES = {
 function LeaderboardItem({ user, rank, points }) {
   const rankStyle = RANK_STYLES[rank] || 'text-slate-500'
   const medals = { 1: '🥇', 2: '🥈', 3: '🥉' }
-  const isTopThree = rank <= 3
 
   return (
-    <div className={`flex items-center gap-3 py-2.5 px-2 -mx-2 rounded-lg transition-colors duration-150 hover:bg-muted/50 ${isTopThree ? 'font-medium' : ''}`}>
-      <span className={`w-7 text-center font-bold text-base ${rankStyle}`}>
-        {medals[rank] || <span className="text-sm text-muted-foreground">{rank}</span>}
+    <div className="flex items-center gap-3 py-2">
+      <span className={`w-6 text-center font-bold ${rankStyle}`}>
+        {medals[rank] || rank}
       </span>
-      <Link href={`/profile/${user.id}`} className="flex items-center gap-2.5 flex-1 group">
-        <Avatar className={`h-8 w-8 transition-transform duration-150 group-hover:scale-110 ${isTopThree ? 'ring-2 ring-amber-200' : ''}`}>
-          <AvatarFallback className={`${getAvatarColor(user.full_name)} text-white text-xs font-semibold`}>
+      <Link href={`/profile/${user.id}`} className="flex items-center gap-2 flex-1 hover:opacity-80">
+        <Avatar className="h-8 w-8">
+          <AvatarFallback className={`${getAvatarColor(user.full_name)} text-white text-xs`}>
             {getInitials(user.full_name)}
           </AvatarFallback>
         </Avatar>
-        <span className="text-sm truncate group-hover:text-purple-700 transition-colors">{user.full_name}</span>
+        <span className="font-medium text-sm truncate">{user.full_name}</span>
       </Link>
-      <span className="text-sm font-semibold text-amber-600 tabular-nums">{points} pts</span>
+      <span className="text-sm font-medium text-amber-600">{points} pts</span>
     </div>
   )
 }
@@ -68,10 +67,10 @@ export default function Leaderboard({
   }
 
   return (
-    <Card className="shadow-sm hover:shadow-md transition-shadow duration-200">
+    <Card>
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-base font-bold">{title}</CardTitle>
+          <CardTitle className="text-base">{title}</CardTitle>
           {showTabs && (
             <Tabs value={activeTab} onValueChange={onTabChange}>
               <TabsList className="h-8">

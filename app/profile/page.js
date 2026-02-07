@@ -56,20 +56,6 @@ export default async function ProfilePage() {
     .order('created_at', { ascending: false })
     .limit(20)
 
-  // Calculate actual points balance from all received shoutouts
-  const { data: allReceivedPoints } = await supabase
-    .from('shoutouts')
-    .select('points')
-    .eq('recipient_id', user.id)
-
-  const calculatedPointsBalance = allReceivedPoints?.reduce((sum, s) => sum + (s.points || 0), 0) || 0
-
-  // Create profile with calculated points balance
-  const profileWithPoints = {
-    ...profile,
-    points_balance: calculatedPointsBalance,
-  }
-
   // Get sent shoutouts
   const { data: sentShoutouts } = await supabase
     .from('shoutouts')
@@ -87,16 +73,16 @@ export default async function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <Navbar user={user} profile={profileWithPoints} />
+      <Navbar user={user} profile={profile} />
 
       <main className="container mx-auto px-4 py-6 space-y-6">
         {/* Profile Header */}
         <div className="bg-white rounded-lg p-6 shadow-sm">
-          <ProfileHeader profile={profileWithPoints} />
+          <ProfileHeader profile={profile} />
         </div>
 
         {/* Points Summary */}
-        <PointsSummary profile={profileWithPoints} />
+        <PointsSummary profile={profile} />
 
         {/* Badges */}
         <BadgeGrid badges={badges} userBadges={userBadges} />
