@@ -67,7 +67,7 @@ export default function DashboardContent({
         {/* Feed - takes 2 columns on large screens */}
         <div className="lg:col-span-2 space-y-4">
           <h2 className="text-lg font-semibold">Recent Shoutouts</h2>
-          <ShoutoutFeed shoutouts={shoutouts} />
+          <ShoutoutFeed shoutouts={shoutouts} currentUserId={user?.id} />
         </div>
 
         {/* Leaderboards - takes 1 column on large screens */}

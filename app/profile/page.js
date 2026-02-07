@@ -62,7 +62,18 @@ export default async function ProfilePage() {
     .select('points')
     .eq('recipient_id', user.id)
 
-  const calculatedPointsBalance = allReceivedPoints?.reduce((sum, s) => sum + (s.points || 0), 0) || 0
+  const totalEarned = allReceivedPoints?.reduce((sum, s) => sum + (s.points || 0), 0) || 0
+
+  // Get total points spent on redemptions
+  const { data: redemptions } = await supabase
+    .from('reward_redemptions')
+    .select('points_spent')
+    .eq('user_id', user.id)
+
+  const totalSpent = redemptions?.reduce((sum, r) => sum + (r.points_spent || 0), 0) || 0
+
+  // Calculate available balance
+  const calculatedPointsBalance = totalEarned - totalSpent
 
   // Create profile with calculated points balance
   const profileWithPoints = {

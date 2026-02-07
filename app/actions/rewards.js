@@ -13,16 +13,24 @@ export async function redeemReward(rewardId) {
     return { error: 'Not authenticated' }
   }
 
-  // Get user's current points balance
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('points_balance')
-    .eq('id', user.id)
-    .single()
+  // Calculate user's actual points balance from shoutouts received
+  const { data: allReceivedPoints } = await supabase
+    .from('shoutouts')
+    .select('points')
+    .eq('recipient_id', user.id)
 
-  if (!profile) {
-    return { error: 'Profile not found' }
-  }
+  const totalEarned = allReceivedPoints?.reduce((sum, s) => sum + (s.points || 0), 0) || 0
+
+  // Get total points already spent on redemptions
+  const { data: existingRedemptions } = await supabase
+    .from('reward_redemptions')
+    .select('points_spent')
+    .eq('user_id', user.id)
+
+  const totalSpent = existingRedemptions?.reduce((sum, r) => sum + (r.points_spent || 0), 0) || 0
+
+  // Calculate available balance
+  const pointsBalance = totalEarned - totalSpent
 
   // Get reward details
   const { data: reward } = await supabase
@@ -37,8 +45,8 @@ export async function redeemReward(rewardId) {
   }
 
   // Check if user has enough points
-  if (profile.points_balance < reward.cost) {
-    return { error: 'Not enough points' }
+  if (pointsBalance < reward.cost) {
+    return { error: `Not enough points. You have ${pointsBalance} pts but need ${reward.cost} pts.` }
   }
 
   // Create redemption record
@@ -55,20 +63,9 @@ export async function redeemReward(rewardId) {
     return { error: 'Failed to redeem reward' }
   }
 
-  // Deduct points from user's balance
-  const { error: updateError } = await supabase
-    .from('profiles')
-    .update({
-      points_balance: profile.points_balance - reward.cost,
-    })
-    .eq('id', user.id)
-
-  if (updateError) {
-    console.error('Error updating points:', updateError)
-  }
-
   revalidatePath('/rewards')
   revalidatePath('/profile')
+  revalidatePath('/dashboard')
 
-  return { success: true }
+  return { success: true, message: `Successfully redeemed ${reward.name}!` }
 }
