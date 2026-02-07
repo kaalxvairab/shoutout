@@ -33,29 +33,29 @@ export default function Navbar({ user, profile }) {
   const pointsRemaining = MONTHLY_POINTS_ALLOWANCE - (profile?.points_given_this_month || 0)
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
-      <div className="container mx-auto px-4">
+    <nav className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-lg supports-[backdrop-filter]:bg-white/60 shadow-sm">
+      <div className="container mx-auto px-4 max-w-7xl">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link href="/dashboard" className="flex items-center gap-2">
-            <span className="text-2xl">🎉</span>
-            <span className="text-xl font-bold">Shoutout</span>
+          <Link href="/dashboard" className="flex items-center gap-2 group">
+            <span className="text-2xl group-hover:animate-float transition-transform">🎉</span>
+            <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Shoutout</span>
           </Link>
 
           {/* Right side */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             {/* Points earned */}
-            <div className="hidden sm:flex items-center gap-2 text-sm bg-green-50 text-green-700 px-3 py-1.5 rounded-full">
+            <div className="hidden sm:flex items-center gap-1.5 text-sm bg-green-50 text-green-700 px-3 py-1.5 rounded-full border border-green-100 shadow-sm">
               <span>⭐</span>
-              <span className="font-medium">{profile?.points_balance || 0}</span>
-              <span className="text-green-600">pts earned</span>
+              <span className="font-semibold tabular-nums">{profile?.points_balance || 0}</span>
+              <span className="text-green-600 text-xs">earned</span>
             </div>
 
             {/* Points remaining to give */}
-            <div className="hidden sm:flex items-center gap-2 text-sm bg-amber-50 text-amber-700 px-3 py-1.5 rounded-full">
+            <div className="hidden sm:flex items-center gap-1.5 text-sm bg-amber-50 text-amber-700 px-3 py-1.5 rounded-full border border-amber-100 shadow-sm">
               <span>🎯</span>
-              <span className="font-medium">{pointsRemaining} / {MONTHLY_POINTS_ALLOWANCE}</span>
-              <span className="text-amber-600">to give</span>
+              <span className="font-semibold tabular-nums">{pointsRemaining}/{MONTHLY_POINTS_ALLOWANCE}</span>
+              <span className="text-amber-600 text-xs">to give</span>
             </div>
 
             {/* User dropdown */}
