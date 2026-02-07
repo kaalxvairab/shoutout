@@ -100,7 +100,7 @@ export async function createShoutout(formData) {
   // Update recipient's points_balance
   const { data: recipientProfile } = await supabase
     .from('profiles')
-    .select('points_balance, email, full_name')
+    .select('points_balance, full_name')
     .eq('id', recipientId)
     .single()
 
@@ -115,18 +115,30 @@ export async function createShoutout(formData) {
     console.error('Error updating recipient points:', recipientError)
   }
 
+  // Get recipient email from auth.users via database function
+  const { data: recipientEmail, error: emailError } = await supabase.rpc('get_user_email', {
+    user_id: recipientId,
+  })
+
+  console.log('Email lookup result:', { recipientEmail, emailError, recipientId })
+
   // Send email notification to recipient
-  if (recipientProfile?.email) {
+  if (recipientEmail) {
+    console.log('Sending shoutout email to:', recipientEmail)
     sendShoutoutEmail({
-      recipientEmail: recipientProfile.email,
-      recipientName: recipientProfile.full_name || 'Team Member',
+      recipientEmail,
+      recipientName: recipientProfile?.full_name || 'Team Member',
       senderName: senderProfile?.full_name || 'A colleague',
       message,
       category,
       points,
+    }).then(result => {
+      console.log('Email send result:', result)
     }).catch(err => {
       console.error('Failed to send shoutout email:', err)
     })
+  } else {
+    console.log('No recipient email found, skipping email notification')
   }
 
   revalidatePath('/dashboard')
