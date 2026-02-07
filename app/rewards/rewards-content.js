@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Card, CardContent } from '@/components/ui/card'
 import RewardCard from '@/components/rewards/reward-card'
@@ -7,10 +8,14 @@ import { redeemReward } from '@/app/actions/rewards'
 
 export default function RewardsContent({ rewards, profile }) {
   const router = useRouter()
+  const [currentBalance, setCurrentBalance] = useState(profile.points_balance || 0)
 
   async function handleRedeem(rewardId) {
+    const reward = rewards.find(r => r.id === rewardId)
     const result = await redeemReward(rewardId)
-    if (result.success) {
+    if (result.success && reward) {
+      // Optimistically update the balance immediately
+      setCurrentBalance(prev => prev - reward.cost)
       router.refresh()
     }
     return result
@@ -31,7 +36,7 @@ export default function RewardsContent({ rewards, profile }) {
             <div className="text-right">
               <p className="text-sm text-muted-foreground">Your balance</p>
               <p className="text-2xl font-bold text-amber-600">
-                {profile.points_balance || 0} pts
+                {currentBalance} pts
               </p>
             </div>
           </div>
@@ -45,7 +50,7 @@ export default function RewardsContent({ rewards, profile }) {
             <RewardCard
               key={reward.id}
               reward={reward}
-              userPoints={profile.points_balance || 0}
+              userPoints={currentBalance}
               onRedeem={handleRedeem}
             />
           ))}
