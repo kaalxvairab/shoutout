@@ -116,12 +116,15 @@ export async function createShoutout(formData) {
   }
 
   // Get recipient email from auth.users via database function
-  const { data: recipientEmail } = await supabase.rpc('get_user_email', {
+  const { data: recipientEmail, error: emailError } = await supabase.rpc('get_user_email', {
     user_id: recipientId,
   })
 
+  console.log('Email lookup result:', { recipientEmail, emailError, recipientId })
+
   // Send email notification to recipient
   if (recipientEmail) {
+    console.log('Sending shoutout email to:', recipientEmail)
     sendShoutoutEmail({
       recipientEmail,
       recipientName: recipientProfile?.full_name || 'Team Member',
@@ -129,9 +132,13 @@ export async function createShoutout(formData) {
       message,
       category,
       points,
+    }).then(result => {
+      console.log('Email send result:', result)
     }).catch(err => {
       console.error('Failed to send shoutout email:', err)
     })
+  } else {
+    console.log('No recipient email found, skipping email notification')
   }
 
   revalidatePath('/dashboard')

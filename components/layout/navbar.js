@@ -44,11 +44,18 @@ export default function Navbar({ user, profile }) {
 
           {/* Right side */}
           <div className="flex items-center gap-4">
-            {/* Points remaining */}
+            {/* Points earned */}
+            <div className="hidden sm:flex items-center gap-2 text-sm bg-green-50 text-green-700 px-3 py-1.5 rounded-full">
+              <span>⭐</span>
+              <span className="font-medium">{profile?.points_balance || 0}</span>
+              <span className="text-green-600">pts earned</span>
+            </div>
+
+            {/* Points remaining to give */}
             <div className="hidden sm:flex items-center gap-2 text-sm bg-amber-50 text-amber-700 px-3 py-1.5 rounded-full">
               <span>🎯</span>
               <span className="font-medium">{pointsRemaining} / {MONTHLY_POINTS_ALLOWANCE}</span>
-              <span className="text-amber-600">pts left</span>
+              <span className="text-amber-600">to give</span>
             </div>
 
             {/* User dropdown */}
