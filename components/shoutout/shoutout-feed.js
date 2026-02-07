@@ -31,12 +31,12 @@ export default function ShoutoutFeed({ shoutouts, loading }) {
 
   if (!shoutouts || shoutouts.length === 0) {
     return (
-      <Card>
-        <CardContent className="py-12 text-center">
-          <div className="text-4xl mb-4">🎉</div>
-          <h3 className="text-lg font-medium">No shoutouts yet</h3>
-          <p className="text-muted-foreground mt-1">
-            Be the first to recognize a colleague!
+      <Card className="border-dashed border-2">
+        <CardContent className="py-16 text-center">
+          <div className="text-5xl mb-4 animate-float">🎉</div>
+          <h3 className="text-lg font-semibold">No shoutouts yet</h3>
+          <p className="text-muted-foreground mt-2 max-w-xs mx-auto">
+            Be the first to recognize a colleague and spread some positivity!
           </p>
         </CardContent>
       </Card>
@@ -45,8 +45,13 @@ export default function ShoutoutFeed({ shoutouts, loading }) {
 
   return (
     <div className="space-y-4">
-      {shoutouts.map((shoutout) => (
-        <ShoutoutCard key={shoutout.id} shoutout={shoutout} />
+      {shoutouts.map((shoutout, index) => (
+        <div
+          key={shoutout.id}
+          className={`animate-fade-in-up stagger-${Math.min(index + 1, 5)}`}
+        >
+          <ShoutoutCard shoutout={shoutout} />
+        </div>
       ))}
     </div>
   )

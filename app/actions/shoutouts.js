@@ -11,6 +11,8 @@ import {
   CATEGORIES,
 } from '@/lib/constants'
 import { sendShoutoutEmail } from '@/lib/email'
+import { checkAndAwardBadges } from '@/lib/badges'
+import { sendDiscordNotification } from '@/lib/discord'
 
 export async function createShoutout(formData) {
   const supabase = await createClient()
@@ -114,6 +116,20 @@ export async function createShoutout(formData) {
   if (recipientError) {
     console.error('Error updating recipient points:', recipientError)
   }
+
+  // Check and award badges for sender and recipient
+  checkAndAwardBadges(supabase, user.id, recipientId)
+    .then(() => console.log('Badge check completed'))
+    .catch((err) => console.error('Badge check failed:', err))
+
+  // Send Discord notification
+  sendDiscordNotification({
+    senderName: senderProfile?.full_name || 'A colleague',
+    recipientName: recipientProfile?.full_name || 'Team Member',
+    message,
+    category,
+    points,
+  }).catch((err) => console.error('Discord notification failed:', err))
 
   // Get recipient email from auth.users via database function
   const { data: recipientEmail, error: emailError } = await supabase.rpc('get_user_email', {
