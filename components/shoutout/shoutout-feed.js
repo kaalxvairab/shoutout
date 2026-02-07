@@ -2,7 +2,7 @@ import ShoutoutCard from './shoutout-card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Card, CardContent } from '@/components/ui/card'
 
-export default function ShoutoutFeed({ shoutouts, loading }) {
+export default function ShoutoutFeed({ shoutouts, loading, currentUserId }) {
   if (loading) {
     return (
       <div className="space-y-4">

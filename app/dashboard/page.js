@@ -27,7 +27,7 @@ export default async function DashboardPage() {
     redirect('/onboarding')
   }
 
-  // Get recent shoutouts with sender and recipient info
+  // Get recent shoutouts with sender, recipient, and reactions
   const { data: shoutouts } = await supabase
     .from('shoutouts')
     .select(`
@@ -37,7 +37,8 @@ export default async function DashboardPage() {
       points,
       created_at,
       sender:profiles!shoutouts_sender_id_fkey(id, full_name),
-      recipient:profiles!shoutouts_recipient_id_fkey(id, full_name)
+      recipient:profiles!shoutouts_recipient_id_fkey(id, full_name),
+      reactions:shoutout_reactions(user_id, emoji)
     `)
     .order('created_at', { ascending: false })
     .limit(20)

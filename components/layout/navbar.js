@@ -55,7 +55,7 @@ export default function Navbar({ user, profile }) {
             <div className="hidden sm:flex items-center gap-2 text-sm bg-amber-50 text-amber-700 px-3 py-1.5 rounded-full">
               <span>🎯</span>
               <span className="font-medium">{pointsRemaining} / {MONTHLY_POINTS_ALLOWANCE}</span>
-              <span className="text-amber-600">pts left</span>
+              <span className="text-amber-600">to give</span>
             </div>
 
             {/* User dropdown */}

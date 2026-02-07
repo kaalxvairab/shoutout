@@ -4,9 +4,10 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { getInitials, getAvatarColor, getRelativeTime } from '@/lib/utils'
 import { CATEGORIES, CATEGORY_COLORS } from '@/lib/constants'
+import ReactionButtons from './reaction-buttons'
 
-export default function ShoutoutCard({ shoutout }) {
-  const { sender, recipient, message, category, points, created_at } = shoutout
+export default function ShoutoutCard({ shoutout, currentUserId }) {
+  const { id, sender, recipient, message, category, points, created_at, reactions } = shoutout
 
   const categoryInfo = CATEGORIES.find((c) => c.value === category)
   const categoryColors = CATEGORY_COLORS[category] || CATEGORY_COLORS.teamwork
