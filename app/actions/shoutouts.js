@@ -100,7 +100,7 @@ export async function createShoutout(formData) {
   // Update recipient's points_balance
   const { data: recipientProfile } = await supabase
     .from('profiles')
-    .select('points_balance, email, full_name')
+    .select('points_balance, full_name')
     .eq('id', recipientId)
     .single()
 
@@ -115,11 +115,16 @@ export async function createShoutout(formData) {
     console.error('Error updating recipient points:', recipientError)
   }
 
+  // Get recipient email from auth.users via database function
+  const { data: recipientEmail } = await supabase.rpc('get_user_email', {
+    user_id: recipientId,
+  })
+
   // Send email notification to recipient
-  if (recipientProfile?.email) {
+  if (recipientEmail) {
     sendShoutoutEmail({
-      recipientEmail: recipientProfile.email,
-      recipientName: recipientProfile.full_name || 'Team Member',
+      recipientEmail,
+      recipientName: recipientProfile?.full_name || 'Team Member',
       senderName: senderProfile?.full_name || 'A colleague',
       message,
       category,

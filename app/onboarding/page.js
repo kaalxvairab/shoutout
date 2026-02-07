@@ -40,7 +40,6 @@ export default function OnboardingPage() {
         .from('profiles')
         .upsert({
           id: user.id,
-          email: user.email,
           full_name: formData.full_name,
           job_title: formData.job_title,
           department: formData.department,
