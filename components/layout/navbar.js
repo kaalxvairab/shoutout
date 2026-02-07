@@ -43,19 +43,19 @@ export default function Navbar({ user, profile }) {
           </Link>
 
           {/* Right side */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             {/* Points earned */}
-            <div className="hidden sm:flex items-center gap-1.5 text-sm bg-green-50 text-green-700 px-3 py-1.5 rounded-full border border-green-100 shadow-sm">
+            <div className="hidden sm:flex items-center gap-2 text-sm bg-green-50 text-green-700 px-3 py-1.5 rounded-full">
               <span>⭐</span>
-              <span className="font-semibold tabular-nums">{profile?.points_balance || 0}</span>
-              <span className="text-green-600 text-xs">earned</span>
+              <span className="font-medium">{profile?.points_balance || 0}</span>
+              <span className="text-green-600">pts earned</span>
             </div>
 
             {/* Points remaining to give */}
-            <div className="hidden sm:flex items-center gap-1.5 text-sm bg-amber-50 text-amber-700 px-3 py-1.5 rounded-full border border-amber-100 shadow-sm">
+            <div className="hidden sm:flex items-center gap-2 text-sm bg-amber-50 text-amber-700 px-3 py-1.5 rounded-full">
               <span>🎯</span>
-              <span className="font-semibold tabular-nums">{pointsRemaining}/{MONTHLY_POINTS_ALLOWANCE}</span>
-              <span className="text-amber-600 text-xs">to give</span>
+              <span className="font-medium">{pointsRemaining} / {MONTHLY_POINTS_ALLOWANCE}</span>
+              <span className="text-amber-600">pts left</span>
             </div>
 
             {/* User dropdown */}
