@@ -5,7 +5,7 @@
 # Problem Addressed: Unifying Solutions
 
 # Team Number 5 :
-- Benjamin Hockley
+- [Benjamin Hockley](https://www.linkedin.com/in/benjamin-hockley/)
 - Ranjan Suwal
 - Nathan Mitchell
 
@@ -23,8 +23,6 @@
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
-[![project_license][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
 
 
 
